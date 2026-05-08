@@ -1,0 +1,20 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    echo "Iniciando despliegue en servidor remoto..."
+  displayName: 'Preparar despliegue'
+
+# Esta parte es la que conecta con tu Ubuntu vía SSH
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'Conexion-Ubuntu' # Ahorita te enseño a crear esto
+    runOptions: 'commands'
+    commands: |
+      cd /var/www/html
+      sudo git pull origin main
+    readyTimeout: '20000'
