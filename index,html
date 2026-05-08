@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - AA3 Cloud</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; text-align: center; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        button { background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #005a9e; }
+        .status { margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gestión de Productos</h1>
+        <p>Desplegado en: <strong>Servidor Ubuntu (Cloud)</strong></p>
+        <hr>
+        
+        <div id="acciones">
+            <button onclick="probarGet()">Listar Productos (GET)</button>
+            <button onclick="probarPost()">Crear Producto (POST)</button>
+        </div>
+
+        <div class="status">
+            <strong>Respuesta del Servidor:</strong>
+            <pre id="resultado">Esperando acción...</pre>
+        </div>
+    </div>
+
+    <script>
+        // REEMPLAZA ESTA IP CON LA IP DE TU SERVIDOR UBUNTU
+        const API_URL = "http://TU_IP_DE_UBUNTU:3000/api/productos";
+
+        async function probarGet() {
+            document.getElementById('resultado').innerText = "Cargando...";
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                document.getElementById('resultado').innerText = "Error: No se pudo conectar al Backend";
+            }
+        }
+
+        async function probarPost() {
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre: "Nuevo Producto Cloud", precio: 250 })
+                });
+                const data = await res.json();
+                document.getElementById('resultado').innerText = "Creado: " + JSON.stringify(data, null, 2);
+            } catch (err) {
+                document.getElementById('resultado').innerText = "Error al crear";
+            }
+        }
+    </script>
+</body>
+</html>
